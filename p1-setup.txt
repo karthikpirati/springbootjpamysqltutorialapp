@@ -1,0 +1,57 @@
+1) google spring initialzr
+2) enter articraft id as project name
+3) choose spring we, jpa and my sql driver as dependencies
+4) download
+5) Open eclipse from  a workspace
+6) File -> import existing maven project and choose downloaded project
+
+-----------------------------------------------------------------------
+
+
+add the database configuartion in application.properties
+which is available in src/main/resources
+
+spring.datasource.url=jdbc:mysql://localhost:3306/springboot
+spring.datasource.username=root
+spring.datasource.password=pirati23
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+
+server.port=9090
+
+
+---------------------------------------------------------------------------
+
+
+MVC archirtecture : 
+
+1) Every request that we made to Spring Boot application will be intercepted by dispatcher servlet
+2) dispatcher servlet is the front end controller
+3) Based on the request url dispatcher servlet will find the controller and forward the request to it.
+4) Now request will forwarded to Controller layer
+5) Controller layer do the following :
+	a) Convert data in json/xml/csv to Java Object
+	b) Validate the data 
+	c) If the data is not return the response with corresponding status code
+
+6) If data is good then control moves from Controller layer to Service layer with data we got.
+7) In Service layer we do all the business and send the calculated data to Repository layer
+8) Repository layer interacts with database and do database operation
+
+Code : 
+
+Create three packages for controller ,service and repository,models
+
+1) Create the controller class and annotate with @RestController
+2) Business logic and Databases might change in future
+3) So create interface for Service and Repository layer
+4) Provide their implementation via Implementation classes.
+5) Annotate the service layer with @service annotation
+6) Annotate the repository layer with @Repository annotation
+7) All the database mapping classes should be placed inside model package.
+
+
+--------------------------------------------------------------------------------------------
+ 
+RestAPI annotations : 

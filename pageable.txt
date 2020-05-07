@@ -1,0 +1,9 @@
+
+// group by multiple fields
+Sort sort = Sort.by(
+    Sort.Order.asc("first"),
+    Sort.Order.desc("second"));
+	
+	//order by
+	@Query("SELECT pr FROM PermissionRule pr WHERE pr.organizationId = ?1 AND pr.type = ?2 GROUP BY objectReference")
+Page<PermissionRule> getFunds(Long organizationId, String type, Pageable pageable);
