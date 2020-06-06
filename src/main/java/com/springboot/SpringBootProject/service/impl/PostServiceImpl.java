@@ -3,7 +3,10 @@ package com.springboot.SpringBootProject.service.impl;
 
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ import com.springboot.SpringBootProject.repository.onetomany.PostRepository;
 import com.springboot.SpringBootProject.service.oneotmany.PostService;
 
 @Service
+@Scope("prototype")
 public class PostServiceImpl implements PostService{
 	
 	@Autowired

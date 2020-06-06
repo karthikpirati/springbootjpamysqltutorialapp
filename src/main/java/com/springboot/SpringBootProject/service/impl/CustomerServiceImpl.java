@@ -9,7 +9,7 @@ import com.springboot.SpringBootProject.models.Customer;
 import com.springboot.SpringBootProject.repository.CustomerRepository;
 import com.springboot.SpringBootProject.service.CustomerService;
 
-@Service
+@Service("customer")
 public class CustomerServiceImpl implements CustomerService{
 	
 	@Autowired

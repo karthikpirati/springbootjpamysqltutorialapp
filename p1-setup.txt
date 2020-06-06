@@ -54,4 +54,119 @@ Create three packages for controller ,service and repository,models
 
 --------------------------------------------------------------------------------------------
  
-RestAPI annotations : 
+Annotations : 
+
+1) SpringBootApplication 
+
+@SpringBootApplication annotation is a combination of three annotations :
+ 	@SpringBootApplication = @Configuration + @ComponentScan + @EnableAutoConfiguration
+
+ a) @EnableAutoConfiguration : to enable Spring Boot's auto-configuration feature.
+ Auto configuration will auto configure features like embedded tomcat server and we have already 
+ seen we are not writing any code to connect to database which is automatically configured internally 
+ with help of @EnableAutoConfiguration
+ 
+ EnableAutoConfiguration does auto configuration depends on jar file we added 
+ eg : In out project we added spring-boot-starter-data-jpa and mysql-connector-java dependencies
+ so instead of we writing hibernate code to connect to database internally spring boot is taking care to connect
+ to database
+ 
+ Not only this it is doing lot of other things
+ 
+ In order for Spring to do auto configuration we need to add @SpringBootApplication
+ spring initialzr is taking care of adding this annotation while creating so we dont add this specifically
+ We dont need to add EnableAutoConfiguration annotation seperately beacuse @SpringBootApplication internally contains this.
+ 
+ 
+ Let say we dont want Spring Boot oc configuare database for us we can exclude that by using 
+ 
+ @SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
+ 
+ b) @Configuration to enable Java-based configuration
+  Let say we want to do our own configuartion we can create class and annoatate with @Configuration
+  create a method with @Bean and write the code.
+  
+  
+  @Configuration
+	public class DataBaseConfiguartion {
+  @Bean
+    public DataSource getDataSource() 
+    {
+        DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
+        dataSourceBuilder.driverClassName("com.mysql");
+        dataSourceBuilder.url("jdbc:mysql://localhost:3306/springboot");
+        dataSourceBuilder.username("sa");
+        dataSourceBuilder.password("");
+        return dataSourceBuilder.build();
+    }
+	
+	
+   @Bean // will inject HibernateTemplte reference to every variable where @Autowired is used.
+   public HibernateTemplte getTemplate() {
+      return new HibernateTemplte(getDataSource() )
+   }
+   
+   
+   //all service in projecvt
+   @Autowirted
+   private HibernateTemplte template;
+}
+ 
+ c) @ComponentScan annotation is used to specify the packages to look for Component classes.
+	SpringBootAnnotation will create the annotation 
+	we can pass the package names to this annotation
+	Spring boot create the beans only for classes that configured inside this packages. 
+
+2) The Annotation to mark as Spring beans
+
+@Controller
+@Service
+@Repository
+@Component
+
+when we annotate the class with this annotation spring container create single object of each per project
+Since spring container takes care of creating the objects they are called spring beans
+So by default all spring beans are singleton(one object for whole project)
+
+Rest api annotations
+
+@RestController = @Controller and @ResponseBody 
+
+ * @SpringBootApplication annotation is a combination of three annotations :
+	@SpringBootApplication = @Configuration + @ComponentScan + @EnableAutoConfiguration
+	
+	
+ * @Configuration to enable Java-based configuration
+ * @ComponentScan annotation is used to specify the packages to look for Component classes.
+ * @EnableAutoConfiguration to enable Spring Boot's auto-configuration feature.
+
+@Bean annotation is used to let Spring framework know that this method s
+hould be used to get the bean implementation to inject in Component classes.
+
+
+
+
+-------------------------------------------------------------------------------------------
+
+@Value() -- use to read data from properties file.
+
+----------------------------------------------------------------------------------
+
+We all know that HTTP is a stateless protocol. All requests and responses are independent.
+
+The server cannot distinguish between new visitors and returning visitors. 
+But sometimes we may need to keep track of client's activity across multiple requests. 
+This is achieved using Session Management. 
+It is a mechanism used by the Web container to store session information for a particular user.
+
+spring HttpSession
+
+spring.session.timeout.seconds=900
+
+
+List<String> messages = (List<String>) session.getAttribute("MY_SESSION_MESSAGES");
+request.getSession().setAttribute("MY_SESSION_MESSAGES", messages);
+request.getSession().invalidate();
+
+
+

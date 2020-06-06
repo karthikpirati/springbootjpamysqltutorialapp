@@ -1,0 +1,345 @@
+Core Container
+
+This container has the following four modules :
+
+Spring Core: This module is the core of the Spring Framework. 
+It provides implementation for features like  IoC (Inversion of Control) and Dependency Injection with singleton design pattern.
+Spring Bean: This module provides implementation for the factory design pattern through BeanFactory.
+Spring Context: This module is built on the solid base provided by the Core and the Beans modules 
+and is a medium to access any object defined and configured.
+
+
+Spring Data Access/ Integration
+
+It consists of the following five modules:
+
+JDBC: This module provides JDBC abstraction layer which eliminates the need of repetitive and unnecessary exception handling overhead.
+ORM: ORM stands for Object Relational Mapping. This module provides consistency/ portability to our code regardless 
+of data access technologies based on object oriented mapping concept.
+OXM: OXM stands for Object XML Mappers. It is used to convert the objects into XML format and vice versa. 
+The Spring OXM provides an uniform API to access any of these OXM frameworks.
+JMS: JMS stands for Java Messaging Service. This module contains features for producing and consuming messages 
+among various clients.
+Transaction: This module supports programmatic and declarative transaction management for classes that implement special interfaces and for all your POJOs. 
+All the enterprise level transaction implementation concepts can be implemented in Spring by using this module.
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+Spring is famous for dependency injection :
+
+Instead of we creating object by new keyword.Spring Container will take care of creating objects.
+Because if we create the object by using new object it will be tightly coupled.
+It will be very difficult to maintain.
+
+
+spring IOC container  :
+
+Spring IoC stands for Inversion of Control. 
+It is the heart of the Spring Framework. 
+The important tasks performed by the IoC container are:
+
+Create the bean
+Instantiating the bean
+Wiring the beans together
+Configuring the beans
+Managing the bean’s entire life-cycle
+
+
+The IoC container receives metadata from either an XML file, Java annotations, or Java code and works accordingly.
+
+IoC adds the flexibility and control of application, 
+and provides a central place of configuration management for Plain Old Java Objects (POJO) of our application. 
+
+There are two types of IoC containers:
+
+BeanFactory
+ApplicationContext
+
+
+BeanFactory :
+
+It is an interface defined in org.springframework.beans.factory.BeanFactory.
+Bean Factory provides the basic support for Dependency Injection.
+It is based on factory design pattern which creates the beans of any type.(Shape example )
+BeanFactory follows lazy-initialization technique which means beans are loaded as soon as bean factory instance 
+is created but the beans are created only when getBean() method is called.
+
+
+The XmlBeanFactory is the implementation class for the BeanFactory interface. 
+To use the BeanFactory, you need to create the instance of XmlBeanFactory class as shown below: 
+1
+BeanFactory beanFactory = new XmlBeanFactory(new ClassPathResource("beans.xml")
+
+Object obj =beanFactory.getBean("helloWorld");
+HelloWorld hw=(HelloWorld)obj;
+
+beans.xml
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<beans xmlns = "http://www.springframework.org/schema/beans"
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+   <bean id = "helloWorld" class = "com.tutorialspoint.HelloWorld">
+      <property name = "message" value = "Hello World!"/>
+   </bean>
+
+</beans>
+
+or
+
+@Controller("conteoller bean name")
+
+@Service("conteoller bean name")
+
+@Controller("conteoller bean name")
+
+
+ApplicationContext : 
+
+It is an interface defined in org.springframework.context.ApplicationContext.
+It is the advanced Spring container and is built on top of the BeanFactory interface.
+ApplicationContext supports the features supported by Bean Factory but also provides some additional functionalities.
+ApplicationContext follows eager-initialization technique which means instance of beans 
+are created as soon as you create the instance of Application context.
+
+The ClassPathXmlApplicationContext,AnnotationConfigApplicationContext are the classes 
+that provide implementation of ApplicationContext interface. 
+
+ClassPathXmlApplicationContext - will be used when we are working with xml to conmfigure beans
+AnnotationConfigApplicationContext - will be used when we are working with annotations to configure beans
+
+Currently internally spring boot uses AnnotationConfigApplicationContext as a class that provides 
+implementation of ApplicationContext interface.
+
+eg :
+ApplicationContext ctx = new AnnotationConfigApplicationContext();
+ctx.getBean("id of the bean");
+
+bean id will be configured via annotation @Service("id")
+
+ApplicationContext ctx = new ClassPathXmlApplicationContext();
+ctx.getBean(Region.class);
+
+
+Differences :
+1) BeanFactory follows lazy initialization where as ApplicationContext follows eager initialization
+2) ApplicationContext built on top of Bean Factory and it provides more features like internalization 
+which means working with multiple languages
+
+Dependency Injection :
+
+Here, you do not create the objects instead you just define how they should be created 
+and IoC container will create the objects for you.
+
+
+By default, Spring creates all singleton beans eagerly at the startup/bootstrapping of the application context.
+The reason behind this is simple: to avoid and detect all possible errors immediately at server start rather than at runtime.
+
+In Spring, dependencies can be injected in three ways:
+
+By constructor
+
+private Service service;
+@Autowired
+public Controller(Service service){
+	this.service=service;
+}
+
+By setter method
+
+private Service service;
+
+public void setService(){
+this.service=service;
+}
+
+By field injection:
+
+@Autowired
+private Service service;
+
+
+Note : @Autowired will not create the object it will just sttores the reference of object that is created
+if service is null which means Object is not created because you have not annotated with
+@Controler or @Service or @Repository or @Component
+
+
+if you find this ertror :
+
+Consider marking one of the beans as @Primary, updating the consumer to accept multiple beans, 
+or using @Qualifier to identify the bean that should be consumed
+
+when bean is having multiple implementation and if we are injecting this bean 
+Spring will get confused about in
+
+eg: we can send messages in many ways (email,watsapp,twitter)
+
+public interface MessagingService {
+	
+	public void sendMessage(String message);
+
+}
+----------------------------------------------------------------------------------------------
+
+spring bean methods
+
+
+singleton scope : Single bean object instance per spring IoC container
+This is the default scope for all the beans in spring 
+Beans will not be created during start of server.
+
+prototype scope : Opposite to singleton, it produces a new instance each and every time a bean is requested.
+Bean will not be created during start of server.
+Bean will be created every time you accessed it.
+
+
+request scope :   A single instance will be created and available during complete lifecycle of an HTTP request.
+Bean will not be created during start of server.
+Bean will be created every time you make http request
+
+
+session scope  : A single instance will be created and available during complete lifecycle of an HTTP Session.
+Bean will not be created during start of server.
+Bean will be created for every http session
+
+Example :
+
+
+//This statement is redundant - singleton is default scope
+@Scope("singleton") 
+@Scope("prototype")
+@Scope("request")
+@Scope("session")
+@Scope("application")
+@Scope("websocket")
+@Controler or @Service or @Repository or @Component
+public class BeanClass {
+ 
+}
+
+----------------------------------------------------------------------------------------------------------------------
+
+Spring framework provides following below ways for controlling life cycle events of a bean:
+
+@PostConstruct and @PreDestroy annotations
+
+
+
+@PostConstruct annotated method will be invoked after the bean has been constructed using default constructor 
+and just before it’s instance is returned to requesting object.
+@PreDestroy annotated method is called just before the bean is about be destroyed inside bean container.
+
+
+
+----------------------------------------------------------------------------------------------------------------
+
+Interceptor :
+
+
+You can use the Interceptor in Spring Boot to perform operations under the following situations −
+
+Before sending the request to the controller
+
+Before sending the response to the client
+
+
+For example, you can use an interceptor to add the request header before sending the request to the controller and 
+add the response header before sending the response to the client.
+
+
+To work with interceptor, you need to create @Component class that supports it and it should implement the HandlerInterceptor interface.
+
+
+preHandle() method − This is used to perform operations before sending the request to the controller. This method should return true to return the response to the client.
+
+postHandle() method − This is used to perform operations before sending the response to the client.
+
+afterCompletion() method − This is used to perform operations after completing the request and response.
+
+
+@Component
+public class ProductServiceInterceptor implements HandlerInterceptor {
+   @Override
+   public boolean preHandle(
+      HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+      
+      return true;
+   }
+   @Override
+   public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {}
+   
+   @Override
+   public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception exception) throws Exception {}
+}
+
+
+@Component
+public class ProductServiceInterceptorAppConfig extends WebMvcConfigurerAdapter {
+   @Autowired
+   ProductServiceInterceptor productServiceInterceptor;
+
+   @Override
+   public void addInterceptors(InterceptorRegistry registry) {
+      registry.addInterceptor(productServiceInterceptor);
+   }
+}
+
+
+
+
+And in order to understand the interceptor, let's take a step back and look at the HandlerMapping. 
+This maps a method to a URL, so that the DispatcherServlet will be able to invoke it when processing a request.
+
+----------------------------------------------------------------------------------------------------------------------
+
+Global exception handling :  To handle all the exceptions inside your project at single place
+
+To implement global exception handling  create a class  and annotate with 
+@ExceptionHandler is like a catch block which catches a specific exception(Arithemic Exception)
+
+
+@ControllerAdvice
+public class GlobalExceptionHandler {
+	
+	@ExceptionHandler(value=Exception.class)
+	public ResponseEntity<Object> catchExpetion(Exception e) {
+		return new ResponseEntity<String>("all checked exceptions handdle here",HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ExceptionHandler(value=RuntimeException.class)
+	public ResponseEntity<AppGenericResponse> catchExpetion(Exception e) {
+		return new ResponseEntity<AppGenericResponse>("all un-checked/runtime exceptions handdle her",HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ExceptionHandler(value=FileNotException.class)
+	public ResponseEntity<AppGenericResponse> catchExpetion(Exception e) {
+		return new ResponseEntity<AppGenericResponse>("all un-checked/runtime exceptions handdle her",HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+}
+
+-----------------------------------------------------------------------------
+
+Logging :  
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+// top of each class
+Logger logger=LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+Logging level can be one of one of TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF. 
+
+
+//application.properties
+logging.file = log
+// if you want to store file in seperate location
+logging.file.path = D:/AllTutorials/springboot/projects/app.log
+logging.level.root=INFO
+
+
+
+

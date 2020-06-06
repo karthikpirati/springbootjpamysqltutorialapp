@@ -1,6 +1,11 @@
 package com.springboot.SpringBootProject.controller.onetomany;
 
+import javax.annotation.PostConstruct;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,14 +19,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springboot.SpringBootProject.globalExceptionHandling.AppGenericResponse;
 import com.springboot.SpringBootProject.models.relations.onetomany.uni.Post;
 import com.springboot.SpringBootProject.service.oneotmany.PostService;
 
 @RestController
 @RequestMapping(value="/post")
+//@Scope("request")
 public class PostController {
+	
+	Logger logger=LoggerFactory.getLogger(PostController.class);
+	
 	@Autowired
 	private PostService postService;
+	
+	@PostConstruct
+	public void initializeData() {
+		
+	}
 	
 	/*
 	 * 
@@ -38,6 +53,7 @@ public class PostController {
 		 * offset = pagesize+pageNumber
 		 * rowCount= pagesize
 		 */
+		
 		Pageable pageable=PageRequest.of(2, 15,Sort.by("description").descending());
 		Page<Post> postListWithPageable=postService.getAll(pageable);
 		return new ResponseEntity<Page<Post>>(postListWithPageable, new HttpHeaders(), HttpStatus.OK); 
@@ -45,9 +61,8 @@ public class PostController {
 	
 	
 	@PostMapping
-	public Post save(@RequestBody Post post) {
-		//System.out.println(PageRequest.of(0, 10));
-		return postService.save(post);
+	public ResponseEntity<Post> save(@RequestBody Post post) {
+		return new ResponseEntity<Post>(postService.save(post),HttpStatus.OK);
 	}
 
 }

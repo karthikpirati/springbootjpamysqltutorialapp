@@ -1,0 +1,50 @@
+By default, Hibernate uses a single global sequence called hibernate_sequence. 
+So if a customer record adds, and id generates 100 
+while next I add a country record and id generates 101. 
+
+
+Solution 1 :
+
+Try creating a custom sequence using @SequenceGenerator annotation. 
+You can set initial value of sequence initialValue = 1 and allocationSize=1is for increment. 
+If you won't use allocationSize=1 hibernate uses the default allocation size which is 50.
+
+
+@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ctry_seq")
+@SequenceGenerator(name = "ctry_seq", sequenceName = "ctry_seq", initialValue = 1, allocationSize=1)
+@Column(name="CTRY_ID")
+private long ctryID;
+
+
+@Id
+@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="cust_seq")
+@SequenceGenerator(name = "cust_seq", sequenceName = "cust_seq", initialValue = 1, allocationSize=1)
+@Column(name="CUST_ID")
+private long custID;
+
+-------------------------------------------------------------------------------------------
+solution 2:
+CREATE SEQUENCE seq
+  MINVALUE 1
+  MAXVALUE 1000000
+  START WITH 1
+  INCREMENT BY 1
+  CACHE 100;
+  
+  
+  @SequenceGenerator(name="seq", initialValue=1, allocationSize=100)
+public class Country {
+
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
+    @Id long id;
+
+}
+
+
+-------------------------------------
+
+@Id
+@GeneratedValue(generator = "uuid")
+@GenericGenerator(name = "uuid", strategy = "uuid2")
+@Column(name = "PR_KEY")
+private String prKey;

@@ -1,0 +1,90 @@
+@Entity
+public class User{
+	private int age;
+	private String name;
+	private boolean isActive;
+	private Date birthDate;
+}
+}
+
+List<User> findTop3ByAge()
+List<User> findByName(String name);
+List<User> findByNameEquals(String name);
+List<User> findByNameIsNot(String name);
+List<User> findByNameIsNull();
+List<User> findByNameIsNotNull();
+
+// fetch users where isActive column is true or false
+
+List<User> findByActiveTrue();
+List<User> findByActiveFalse();
+List<User> findByNameContaining(String infix);
+
+// select * from user where name like '%ri%oo%';
+//String likePattern = "%ri%oo%";
+List<User> findByNameLike(String likePattern);
+
+
+List<User> findByDateLessThan(Date date);
+List<User> findByAgeLessThanEqual(Date date);
+
+
+List<User> findByAgeIn(Collection<Integer> ages);
+
+//multiplecondition
+List<User> findByNameOrBirthDate(String name, ZonedDateTime birthDate);
+List<User> findByNameOrBirthDateAndActive(String name, ZonedDateTime birthDate, Boolean active);
+
+
+//sorting
+// select * from user where name='' order by name desc;
+List<User> findByNameOrderByName(String name);
+List<User> findByNameOrderByNameAsc(String name);
+List<User> findByNameOrderByNameDesc(String name);
+
+
+
+
+let say we are join or selecting only few columns from table then existing class
+wont work then
+
+@Query("SELECT new com.baeldung.aggregation.model.custom.CommentCount(c.year, COUNT(c.year)) "
+  + "FROM Comment AS c GROUP BY c.year ORDER BY c.year DESC")
+List<CommentCount> countTotalCommentsByYearClass();
+
+
+
+public class CommentCount {
+    private Integer year;
+    private Long total;
+ 
+    public CommentCount(Integer year, Long total) {
+        this.year = year;
+        this.total = total;
+    }
+    // getters and setters
+}
+
+
+
+
+To use interface-based projection, we must define a Java interface composed of getter methods 
+that match the projected attribute names. Let's define an interface for our query result:
+
+public interface ICommentCount {
+    Integer getYearComment();
+    Long getTotalComment();
+}
+
+// HQL query with interface-based projection
+@Query("SELECT c.year AS yearComment, COUNT(c.year) AS totalComment "
+  + "FROM Comment AS c GROUP BY c.year ORDER BY c.year DESC")
+List<ICommentCount> countTotalCommentsByYearInterface();
+
+
+//@Query(value = "SELECT c.year AS yearComment, COUNT(c.*) AS totalComment "
+  + "FROM comment AS c GROUP BY c.year ORDER BY c.year DESC", nativeQuery = true)
+List<ICommentCount> countTotalCommentsByYearNative();
+
+
+
