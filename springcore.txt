@@ -176,11 +176,49 @@ Spring will get confused about in
 
 eg: we can send messages in many ways (email,watsapp,twitter)
 
+//MessagingService
 public interface MessagingService {
 	
 	public void sendMessage(String message);
 
 }
+
+There are multiple implementaion classes to this interface :
+
+@Service("email")
+public class EmailService implements MessagingService{
+
+	@Override
+	public void sendMessage(String message)  {
+		System.out.println("sending message through email");
+	}
+
+}
+
+@Service("watsapp")
+public class WatsAppService implements MessagingService{
+
+	@Override
+	public void sendMessage(String message) {
+		System.out.println("sending message through watsapp");
+	}
+
+}
+
+Let say if you are trying to inject MessagingService dependency inside controller ie will get confused
+which depency to inject(beacuse we have muliple implementations EmailService & WatsAppService) 
+
+To resolve the ambiquity use @Qualifier with id of bean to inject
+
+@RestController
+public class Controller{
+	// qualifier decides which bean to inject (watsapp or email)
+		@Qualifier("email")
+		@Autowired // will inject reference of specific bean into below referenced variable messageService
+		private MessagingService messageService;
+} 
+
+check package com.springboot.SpringBootProject.springcore.DI for example
 ----------------------------------------------------------------------------------------------
 
 spring bean methods
