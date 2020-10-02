@@ -34,6 +34,8 @@ import org.springframework.context.annotation.ComponentScan;
   Let say we want to do our own configuartion we can create class and annoatate with @Configuration
   create a method with @Bean and write the code.
   
+  @Bean is used to inject to inject the dependency;
+  
  
  c) @ComponentScan annotation is used to specify the packages to look for Component classes.
 	we can pass the package names to this annotation

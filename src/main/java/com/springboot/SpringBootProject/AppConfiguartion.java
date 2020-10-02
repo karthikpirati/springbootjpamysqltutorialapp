@@ -8,6 +8,9 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.springboot.SpringBootProject.service.impl.PostServiceImpl;
+import com.springboot.SpringBootProject.service.oneotmany.PostService;
+
 @Configuration
 public class AppConfiguartion {
 	
@@ -85,7 +88,7 @@ public class AppConfiguartion {
 	 private SessionFactory factory;
 	 
 	 */
-
+	
 
 	@Bean
 	public void preparePostData() {

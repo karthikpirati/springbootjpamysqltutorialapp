@@ -62,7 +62,19 @@ public class PostController {
 	
 	@PostMapping
 	public ResponseEntity<Post> save(@RequestBody Post post) {
+		if(post.getDescription()==null) {
+			return new ResponseEntity<Post>(postService.save(post),HttpStatus.BAD_REQUEST); 
+		}
 		return new ResponseEntity<Post>(postService.save(post),HttpStatus.OK);
 	}
+	
+//	@PostMapping
+//	public ResponseEntity<Post> save2(@RequestBody Post post) {
+//		if(post.getDescription()==null) {
+//			return new ResponseEntity<Post>(postService.save(post),HttpStatus.BAD_REQUEST); 
+//		}
+//		return new ResponseEntity<Post>(postService.save(post),HttpStatus.OK);
+//	}
+
 
 }

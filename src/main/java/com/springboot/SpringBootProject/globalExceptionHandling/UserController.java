@@ -17,7 +17,7 @@ import com.springboot.SpringBootProject.dto.UserResponseDTO;
 import com.springboot.SpringBootProject.models.User;
 import com.springboot.SpringBootProject.repository.UserRepository;
 
-@RequestMapping(value="/user")
+@RequestMapping(value="/users")
 @RestController
 public class UserController {
 	
@@ -26,7 +26,7 @@ public class UserController {
 	@Autowired
 	private UserRepository userrepo;
 	
-	@PostMapping
+	@PostMapping(value="/register")
 	public UserResponseDTO save(@RequestBody UserRequestDTO dto) throws InvalidDataException {
 		logger.info("UserController >> save() >> starts");
 		User user=new User();
