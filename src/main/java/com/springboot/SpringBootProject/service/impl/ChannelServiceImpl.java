@@ -25,34 +25,39 @@ public class ChannelServiceImpl implements ChannelService{
 	@Autowired
 	private SubscriberRepository subscriberRepository;
 
+//	@Override
+//	public Channel save(Channel channel, int subId) {
+//		Optional<Subscriber> isSubscriber=subscriberRepository.findById(subId);
+//		if(isSubscriber.isPresent()) {
+//			channel.getSubscribers().add(isSubscriber.get());
+//		}
+//		return channelRepository.save(channel);
+//	}
+
 	@Override
-	public Channel save(Channel channel, int subId) {
-		Optional<Subscriber> isSubscriber=subscriberRepository.findById(subId);
-		if(isSubscriber.isPresent()) {
-			channel.getSubscribers().add(isSubscriber.get());
-		}
+	public Channel update(Channel channel) {
 		return channelRepository.save(channel);
 	}
 
 	@Override
-	public Channel update(Channel channel) {
-		return null;
-	}
-
-	@Override
 	public void delete(int id) {
-		// TODO Auto-generated method stub
+		channelRepository.deleteById(id);
 		
 	}
 
 	@Override
 	public Channel save(Channel channel) {
 		// TODO Auto-generated method stub
-		return null;
+		return channelRepository.save(channel);
 	}
 
 	@Override
 	public Channel findById(int id) {
+		Optional<Channel> optChannel =  channelRepository.findById(id);
+		if(optChannel.isPresent()) {
+			return optChannel.get();
+		}
+		
 		return null;
 	}
 
@@ -77,6 +82,25 @@ public class ChannelServiceImpl implements ChannelService{
 			channels.add(c);
 		}
 		return null;
+	}
+
+	@Override
+	public Channel subscribe(int subId, int channelId) {
+		Optional<Subscriber> isSubscriber=subscriberRepository.findById(subId);
+		Optional<Channel> isChannel= channelRepository.findById(channelId);
+		Channel channel = null;
+		if(isSubscriber.isPresent() && isChannel.isPresent()) {
+			channel = isChannel.get();
+			channel.getSubscribers().add(isSubscriber.get());
+			channelRepository.save(channel);
+		}
+		return channel;
+	}
+
+	@Override
+	public List<Channel> findAll() {
+		// TODO Auto-generated method stub
+		return channelRepository.findAll();
 	}
 
 	

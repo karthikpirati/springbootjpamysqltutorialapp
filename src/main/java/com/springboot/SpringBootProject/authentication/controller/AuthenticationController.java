@@ -23,7 +23,7 @@ import com.springboot.SpringBootProject.authentication.model.AuthUser;
 import com.springboot.SpringBootProject.authentication.service.AuthService;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/sm2")
 @CrossOrigin("http://localhost:4200")
 public class AuthenticationController {
 	

@@ -18,9 +18,14 @@ import com.springboot.SpringBootProject.service.CustomerService;
 @RequestMapping(value="/customer")
 public class CustomerController {
 	
-	@Autowired
-	private CustomerService customerService;
 	
+	private CustomerService customerService; // = new CustomerService();
+	
+	@Autowired
+	public CustomerController(CustomerService customerService) {
+
+		this.customerService = customerService;
+	}
 	/*
 	 * post and put we will send our data in RequestBody
 	 * @RequestBody

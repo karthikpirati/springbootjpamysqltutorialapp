@@ -28,14 +28,14 @@ public class Subscriber {
 	@Column(name="name",unique=true,nullable = false,length = 20)
 	private String name;
 	
-	@ManyToMany(mappedBy="subscribers",
-			cascade = {
-					CascadeType.PERSIST,
-					CascadeType.MERGE
-			},
-			fetch=FetchType.LAZY)
-	@JsonIgnore
-	private Set<Channel> channels=new HashSet<Channel>();
+		@ManyToMany(mappedBy="subscribers",
+				cascade = {
+						CascadeType.PERSIST,
+						CascadeType.MERGE
+				},
+				fetch=FetchType.LAZY)
+		@JsonIgnore
+		private Set<Channel> channels=new HashSet<Channel>();
 	
 	public Subscriber() {
 		

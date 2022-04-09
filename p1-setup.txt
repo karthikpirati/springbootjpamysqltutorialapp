@@ -31,7 +31,7 @@ MVC archirtecture :
 3) Based on the request url dispatcher servlet will find the controller and forward the request to it.
 4) Now request will forwarded to Controller layer
 5) Controller layer do the following :
-	a) Convert data in json/xml/csv to Java Object
+	a) Convert data in json/xml/csv to Java Object (@RestController)
 	b) Validate the data 
 	c) If the data is not return the response with corresponding status code
 
@@ -56,7 +56,7 @@ Create three packages for controller ,service and repository,models
  
 Annotations : 
 
-1) SpringBootApplication 
+1) SpringBootApplication : 
 
 @SpringBootApplication annotation is a combination of three annotations :
  	@SpringBootApplication = @Configuration + @ComponentScan + @EnableAutoConfiguration
@@ -81,7 +81,7 @@ Annotations :
  Let say we dont want Spring Boot oc configuare database for us we can exclude that by using 
  
  @SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
- 
+ ---------------------------------
  b) @Configuration to enable Java-based configuration
   Let say we want to do our own configuartion we can create class and annoatate with @Configuration
   create a method with @Bean and write the code.
@@ -111,12 +111,33 @@ Annotations :
    @Autowirted
    private HibernateTemplte template;
 }
- 
+-------------------------------------------------------------------------------------
+@Bean annotation is used to let Spring framework know that this method s
+hould be used to get the bean implementation to inject in Component classes.
+
+@Bean will be used to inject the bean when we created the object using new keyword instead of spring container
+in class annotated with @Configuartion
+
+Means we dont wont use @Controller or @Service or @Repository or @Component annotations to create the objects
+instead we create the object inside the method 
+
+public HibernateTemplte getibernateTemplte(){
+ return new HibernateTemplte(getDataSource() )
+}
+
+If you observe this method is returning HibernateTemplte object which meeans object is created 
+The only thing remaining is to inject this object to variable
+
+so for that we use @Autowired
+@Autowired
+private HibernateTemplte hibernateTemplete;
+
+---------------------------------------------------------------
  c) @ComponentScan annotation is used to specify the packages to look for Component classes.
 	SpringBootAnnotation will create the annotation 
 	we can pass the package names to this annotation
 	Spring boot create the beans only for classes that configured inside this packages. 
-
+----------------------------------------------------------
 2) The Annotation to mark as Spring beans
 
 @Controller
@@ -140,17 +161,18 @@ Rest api annotations
  * @ComponentScan annotation is used to specify the packages to look for Component classes.
  * @EnableAutoConfiguration to enable Spring Boot's auto-configuration feature.
 
-@Bean annotation is used to let Spring framework know that this method s
-hould be used to get the bean implementation to inject in Component classes.
+-------------------------------------------------------------------------------------------
+Singleton Design pattern :
 
-
-
+1) private constructor (to restrict from creating objects from other classes)
+2) private variable which holds single instance
+3) public static method to return that single instance
 
 -------------------------------------------------------------------------------------------
 
 @Value() -- use to read data from properties file.
 
-----------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------
 
 We all know that HTTP is a stateless protocol. All requests and responses are independent.
 
@@ -168,5 +190,11 @@ List<String> messages = (List<String>) session.getAttribute("MY_SESSION_MESSAGES
 request.getSession().setAttribute("MY_SESSION_MESSAGES", messages);
 request.getSession().invalidate();
 
+---------------------------------------------------------------------------------------------
+
+1)By auto configuration - it is reducing lot of boiler plate code
+all we have to is add requierd dependency and properties in application.properties file
+
+2)Embedded tomcat server(not only tomat it is also providing )
 
 

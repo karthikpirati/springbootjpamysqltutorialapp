@@ -1,5 +1,6 @@
 package com.springboot.SpringBootProject.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class CommentServiceImpl implements CommentService{
 	private CommentRepository commentRepository;
 
 	@Override
-	public Page<Comment> getCommentsByPostId(int postId,Pageable pageable) {
+	public List<Comment> getCommentsByPostId(int postId,Pageable pageable) {
 		
 		return commentRepository.findByPostId(postId, pageable);
 	}

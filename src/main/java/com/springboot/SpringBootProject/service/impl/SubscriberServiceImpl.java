@@ -1,5 +1,8 @@
 package com.springboot.SpringBootProject.service.impl;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,25 +26,34 @@ public class SubscriberServiceImpl implements SubscriberService{
 
 	@Override
 	public Subscriber update(Subscriber subscriber) {
-		// TODO Auto-generated method stub
-		return null;
+		return subscriberRepository.save(subscriber);
 	}
 
 	@Override
 	public void delete(int id) {
-		// TODO Auto-generated method stub
+		subscriberRepository.deleteById(id);
 		
 	}
 
 	@Override
 	public Subscriber get(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Subscriber> optSub = subscriberRepository.findById(id);
+		if(optSub.isPresent()) {
+			return optSub.get();
+		}else {
+			return null;
+		}
 	}
 
 	@Override
 	public Page<Subscriber> findBySubscriberId(int channelId, Pageable pageable) {
 		return subscriberRepository.findByChannels_Id(channelId, pageable);
+	}
+
+	@Override
+	public List<Subscriber> findAll() {
+		// TODO Auto-generated method stub
+		return subscriberRepository.findAll();
 	}
 
 }

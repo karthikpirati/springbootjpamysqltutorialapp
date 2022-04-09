@@ -10,10 +10,11 @@ import com.springboot.SpringBootProject.models.relations.manytomany.Channel;
 public interface ChannelService {
 	
 	public Channel save(Channel channel);
-	public Channel save(Channel channel,int subId);
+	public Channel subscribe(int subId, int channelId);
 	public Channel update(Channel channel);
 	public void delete(int id);
 	public Channel findById(int id);
+	public List<Channel> findAll();
 	public List<Channel> findChannelBySubscriberId(int subId);
 	public Page<Channel> findBySubscribers_Id(int subId,Pageable pageable);
 	public List<Channel> findBySubscribersIdNative(int subId);

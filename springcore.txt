@@ -36,7 +36,7 @@ spring IOC container  :
 
 Spring IoC stands for Inversion of Control. 
 It is the heart of the Spring Framework. 
-The important tasks performed by the IoC container are:
+The important tasks performed by the IoC container areUser:
 
 Create the bean
 Instantiating the bean

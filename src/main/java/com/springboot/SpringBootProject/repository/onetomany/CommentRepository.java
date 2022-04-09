@@ -1,5 +1,6 @@
 package com.springboot.SpringBootProject.repository.onetomany;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -23,7 +24,7 @@ public interface CommentRepository extends JpaRepository<Comment, Integer>{
 	 * Select c from Comment c where c.post.id=:postId
 	 * 
 	 */
-	Page<Comment> findByPostId(int postId,Pageable pageable);
+	List<Comment> findByPostId(int postId,Pageable pageable); //Select c from Comment where post_id
 	
 	/*
 	 * fetching Comments by Comment.Id and Post.Id

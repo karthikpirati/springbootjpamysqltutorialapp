@@ -1,0 +1,19 @@
+Spring ApplicationContext
+ApplicationContext is a corner stone of a Spring Boot application. 
+It represents the Spring IoC container and is responsible for 
+instantiating, configuring, and assembling the beans. 
+The container gets its instructions on what objects to instantiate, configure, and 
+assemble by reading configuration metadata. The configuration metadata is represented in XML, Java annotations, or Java code.
+
+ApplicationContext provides the following:
+
+Bean factory methods for accessing application components
+The ability to load file resources in a generic way
+The ability to publish events to registered listeners
+The ability to resolve messages, supporting internationalization
+
+
+
+To access the application context, we can autowire the ApplicationContext interface or implement the ApplicationContextAware.
+
+server.servlet.contextPath=/springbootapp

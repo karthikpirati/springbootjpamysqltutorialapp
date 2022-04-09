@@ -29,7 +29,8 @@ public class Consumer {
 	 	@PostConstruct
 	    public void customInit() 
 	    {
-	        System.out.println("Method conusmer customInit() invoked...");
+
+	    	System.out.println("Method conusmer customInit() invoked...");
 	    }
 	     
 	    @PreDestroy

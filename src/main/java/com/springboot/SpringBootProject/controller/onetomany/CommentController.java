@@ -1,5 +1,7 @@
 package com.springboot.SpringBootProject.controller.onetomany;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,11 +25,15 @@ public class CommentController {
 	private CommentService commentService;
 	
 	//@RequestMapping(name = "/{id}", method = RequestMethod.GET)
-	@GetMapping(value="/{id}")
-	public ResponseEntity<Page<Comment>> getCommentByPostId(@PathVariable("id") int id) {
-		Pageable pageable=PageRequest.of(1, 10);
-		Page<Comment> commentsByPagination=commentService.getCommentsByPostId(id, pageable);
-		return new ResponseEntity<Page<Comment>>(commentsByPagination,HttpStatus.OK);
+	@GetMapping(value="/{id}/{pageNo}/{pageSize}")
+	public ResponseEntity<?> getCommentByPostId(
+			@PathVariable("id") int id,
+			@PathVariable("pageNo") int pageNo,
+			@PathVariable("pageSize") int pageSize
+			) {
+		Pageable pageable=PageRequest.of(pageNo, pageSize);
+		List<Comment> commentsByPagination=commentService.getCommentsByPostId(id, pageable);
+		return new ResponseEntity<List<Comment>>(commentsByPagination,HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/{id}/{postId}")

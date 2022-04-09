@@ -1,0 +1,115 @@
+Note : However, if we're using a Spring Boot project and have a spring-data-* or 
+spring-tx dependencies on the classpath, then transaction management will be enabled by default.
+
+or
+
+Spring 3.1 introduces the @EnableTransactionManagement annotation that we can use in a @Configuration class 
+to enable transactional support:
+
+@Configuration
+@EnableTransactionManagement
+public class AppConfiguration{
+}
+
+
+The @Transactional Annotation(declarative approach by annotation):
+----------------------------------
+With transactions configured, we can now annotate a bean with @Transactional either at the class or method level:
+
+
+Rollback :
+------------
+Note that by default, rollback happens for runtime, unchecked exceptions only. 
+The checked exception does not trigger a rollback of the transaction. 
+We can, of course, configure this behavior with the rollbackFor and noRollbackFor annotation parameters.
+
+@Transactional(rollbackFor = { SQLException.class })
+public void createCourseDeclarativeWithCheckedException(Course course) throws SQLException {
+}
+
+@Transactional(noRollbackFor = { SQLException.class })
+public void createCourseDeclarativeWithNoRollBack(Course course) throws SQLException {
+}
+
+
+In the programmatic approach, we rollback the transactions using TransactionAspectSupport:
+---------------------------------------------------------------------------------------------
+public void createCourseDefaultRatingProgramatic(Course course) {
+    try {
+       courseDao.create(course);
+    } catch (Exception e) {
+       TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+    }
+}
+
+Mistakes while using @Transactional:
+-----------------------------------------
+What's important to keep in mind is that, if the transactional bean is implementing an interface,
+by default the proxy will be a Java Dynamic Proxy. 
+This means that only external method calls that come in through the proxy will be intercepted. 
+Any self-invocation calls will not start any transaction, even if the method has the @Transactional annotation
+
+Another caveat of using proxies is that only public methods should be annotated with @Transactional. 
+Methods of any other visibilities will simply ignore the annotation silently as these are not proxied.
+
+The most common @Transactional pitfall:
+-----------------------------------------
+
+@Service
+public class UserService {
+
+    @Transactional
+    public void invoice() {
+        createPdf();
+        // send invoice as email, etc.
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void createPdf() {
+        // ...
+    }
+}
+
+UserService has a transactional invoice() method. Which calls another transactional method, createPdf() on the InvoiceService.
+
+How many physical transactions would you expect to be open, once someone calls invoice()?
+
+Nope, the answer is not two, but one. Why?
+
+
+Let’s go back to the proxies' section of this guide. 
+Spring creates that transactional UserService proxy for you, 
+but once you are inside the UserService class and call other inner methods,
+ there is no more proxy involved. This means, no new transaction for you.
+ 
+ solution :
+ 
+ create new bean and call that bean
+now in this case two transactions will be created.
+ 
+ @Service
+public class UserService {
+
+@Autowired
+private InvoiceService invoiceService;
+
+    @Transactional
+    public void invoice() {
+        invoiceService.createPdf();
+        // send invoice as email, etc.
+    }
+
+    
+}
+
+ @Service
+public class InvoiceService {
+
+    @Transactional
+    public void invoice() {
+        createPdf();
+        // send invoice as email, etc.
+    }  
+}
+
+ 
